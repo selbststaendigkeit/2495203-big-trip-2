@@ -5,14 +5,15 @@ import TripPointView from '../view/trip-point-view.js';
 export default class TripPointsListPresenter {
   addingFormComponent = new TripPointAddingFormView();
 
-  constructor({listContainer}) {
-    this.listContainer = listContainer;
+  constructor({listElement, pointsModel}) {
+    this.listElement = listElement;
+    this.pointsModel = pointsModel;
   }
 
   init() {
-    render(this.addingFormComponent, this.listContainer);
-    for (let i = 0; i < 3; i++) {
-      render(new TripPointView(), this.listContainer);
-    }
+    render(this.addingFormComponent, this.listElement);
+    this.pointsModel.forEach((modelItem) => {
+      render(new TripPointView(modelItem), this.listElement);
+    });
   }
 }
