@@ -3,16 +3,17 @@ import TripPointAddingFormView from '../view/trip-point-adding-form-view.js';
 import TripPointView from '../view/trip-point-view.js';
 
 export default class TripPointsListPresenter {
-  addingFormComponent = new TripPointAddingFormView();
-
-  constructor({listContainer}) {
-    this.listContainer = listContainer;
+  constructor({listElement, pointsModel}) {
+    this.listElement = listElement;
+    this.pointsModel = pointsModel;
+    this.pointsData = this.pointsModel.getTripPoints();
+    this.addingFormComponent = new TripPointAddingFormView(this.pointsModel);
   }
 
   init() {
-    render(this.addingFormComponent, this.listContainer);
-    for (let i = 0; i < 3; i++) {
-      render(new TripPointView(), this.listContainer);
-    }
+    render(this.addingFormComponent, this.listElement);
+    this.pointsData.forEach((pointData) => {
+      render(new TripPointView(pointData), this.listElement);
+    });
   }
 }

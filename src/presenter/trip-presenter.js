@@ -4,12 +4,15 @@ import TripPointsListView from '../view/trip-points-list-view.js';
 import TripPointsListPresenter from './trip-points-list-presenter.js';
 
 export default class TripPresenter {
-  sortComponent = new SortView();
-  tripPointsListComponent = new TripPointsListView();
-  tripPointsListPresenter = new TripPointsListPresenter({listContainer: this.tripPointsListComponent.getElement()});
-
-  constructor({tripContainer}) {
+  constructor({tripContainer, pointsModel}) {
     this.tripContainer = tripContainer;
+    this.pointsModel = pointsModel;
+    this.sortComponent = new SortView();
+    this.tripPointsListComponent = new TripPointsListView();
+    this.tripPointsListPresenter = new TripPointsListPresenter({
+      listElement: this.tripPointsListComponent.getElement(),
+      pointsModel: this.pointsModel
+    });
   }
 
   init() {
