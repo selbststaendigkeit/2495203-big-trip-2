@@ -18,7 +18,17 @@ export default class PointsModel {
   pointTypes = pointTypes;
   cities = cities;
 
-  getTripPoints() {
+  constructor() {
+    this.init();
+  }
+
+  init() {
+    this.adaptPointsData();
+    this.adaptBlankPointData();
+    this.adaptPointTypesData();
+  }
+
+  adaptPointsData() {
     const tripPointsData = structuredClone(this.tripPoints);
     tripPointsData.forEach((pointData) => {
       pointData.formattedDate = getTripPointFormattedDate(pointData.startDate);
@@ -30,23 +40,35 @@ export default class PointsModel {
       pointData.startTime = getTime(pointData.startDate);
       pointData.endTime = getTime(pointData.endDate);
     });
-    return tripPointsData;
+    this.adaptedPointsData = tripPointsData;
   }
 
-  getBlankPoint() {
+  adaptBlankPointData() {
     const blankPointData = structuredClone(this.blankPoint);
     blankPointData.type.capitalizedName = capitalizeFirstLetter(blankPointData.type.name);
     blankPointData.formattedStartDate = formatAddingFormDate(blankPointData.startDate);
     blankPointData.formattedEndDate = formatAddingFormDate(blankPointData.endDate);
-    return blankPointData;
+    this.adaptedBlankPointData = blankPointData;
   }
 
-  getPointTypes() {
+  adaptPointTypesData() {
     const pointTypesData = structuredClone(this.pointTypes);
     pointTypesData.forEach((typeData) => {
       typeData.capitalizedName = capitalizeFirstLetter(typeData.name);
     });
-    return pointTypesData;
+    this.adaptedPointTypesData = pointTypesData;
+  }
+
+  getTripPoints() {
+    return this.adaptedPointsData;
+  }
+
+  getBlankPoint() {
+    return this.adaptedBlankPointData;
+  }
+
+  getPointTypes() {
+    return this.adaptedPointTypesData;
   }
 
   getCities() {
