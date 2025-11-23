@@ -114,18 +114,23 @@ function getAddTripPointFormTemplate({blankPoint, pointTypes, cities}) {
 }
 
 export default class TripPointAddingFormView {
+  #pointsModel = null;
+  #cities = null;
+  #pointTypes = null;
+  #blankPointData = null;
+
   constructor(pointsModel) {
-    this.pointsModel = pointsModel;
-    this.cities = pointsModel.getCities();
-    this.pointTypes = pointsModel.getPointTypes();
-    this.blankPointData = pointsModel.getBlankPoint();
+    this.#pointsModel = pointsModel;
+    this.#cities = pointsModel.cities;
+    this.#pointTypes = pointsModel.pointTypes;
+    this.#blankPointData = pointsModel.blankPoint;
   }
 
   getTemplate() {
     return getAddTripPointFormTemplate({
-      blankPoint: this.blankPointData,
-      pointTypes: this.pointTypes,
-      cities: this.cities
+      blankPoint: this.#blankPointData,
+      pointTypes: this.#pointTypes,
+      cities: this.#cities
     });
   }
 

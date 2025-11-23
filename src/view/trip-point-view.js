@@ -49,12 +49,13 @@ function getTripPointTemplate(pointData) {
 }
 
 export default class TripPointView {
+  #pointData = null;
   constructor(pointData) {
-    this.pointData = pointData;
+    this.#pointData = pointData;
   }
 
   getTemplate() {
-    return getTripPointTemplate(this.pointData);
+    return getTripPointTemplate(this.#pointData);
   }
 
   getElement() {
