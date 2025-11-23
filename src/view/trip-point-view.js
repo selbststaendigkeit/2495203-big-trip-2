@@ -1,4 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import TripPointEditingFormView from './trip-point-editing-form-view.js';
 
 function getOffersTemplate(offersData) {
   return (
@@ -50,10 +51,22 @@ function getTripPointTemplate(pointData) {
 
 export default class TripPointView extends AbstractView {
   #pointData = null;
+  #pointTypes = null;
+  #editFormComponent = null;
+  #editButton = null;
+  #cities = null;
 
-  constructor(pointData) {
+  constructor({pointData, pointTypes, cities}) {
     super();
     this.#pointData = pointData;
+    this.#pointTypes = pointTypes;
+    this.#cities = cities;
+    this.#editFormComponent = new TripPointEditingFormView({
+      pointData: this.#pointData,
+      pointTypes: this.#pointTypes,
+      cities: this.#cities
+    });
+    this.#editButton = this.element.querySelector('.event__rollup-btn');
   }
 
   get template() {

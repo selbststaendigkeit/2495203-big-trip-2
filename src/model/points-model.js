@@ -8,7 +8,7 @@ import {
   getTime,
   formatDateDifference,
   capitalizeFirstLetter,
-  formatAddingFormDate
+  formatFormDate
 } from '../utils.js';
 
 export default class PointsModel {
@@ -57,6 +57,8 @@ export default class PointsModel {
       pointData.duration = formatDateDifference(pointData.startDate, pointData.endDate);
       pointData.startTime = getTime(pointData.startDate);
       pointData.endTime = getTime(pointData.endDate);
+      pointData.formStartDate = formatFormDate(pointData.startDate);
+      pointData.formEndDate = formatFormDate(pointData.endDate);
     });
     this.#adaptedPointsData = tripPointsData;
   }
@@ -64,8 +66,8 @@ export default class PointsModel {
   #adaptBlankPointData() {
     const blankPointData = structuredClone(this.#blankPoint);
     blankPointData.type.capitalizedName = capitalizeFirstLetter(blankPointData.type.name);
-    blankPointData.formattedStartDate = formatAddingFormDate(blankPointData.startDate);
-    blankPointData.formattedEndDate = formatAddingFormDate(blankPointData.endDate);
+    blankPointData.formattedStartDate = formatFormDate(blankPointData.startDate);
+    blankPointData.formattedEndDate = formatFormDate(blankPointData.endDate);
     this.#adaptedBlankPointData = blankPointData;
   }
 

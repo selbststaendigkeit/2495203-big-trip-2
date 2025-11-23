@@ -6,12 +6,16 @@ export default class TripPointsListPresenter {
   #listElement = null;
   #pointsModel = null;
   #pointsData = null;
+  #pointTypes = null;
+  #cities = null;
   #addingFormComponent = null;
 
   constructor({listElement, pointsModel}) {
     this.#listElement = listElement;
     this.#pointsModel = pointsModel;
     this.#pointsData = this.#pointsModel.tripPoints;
+    this.#pointTypes = this.#pointsModel.pointTypes;
+    this.#cities = this.#pointsModel.cities;
     this.#addingFormComponent = new TripPointAddingFormView({
       cities: this.#pointsModel.cities,
       pointTypes: this.#pointsModel.pointTypes,
@@ -20,9 +24,17 @@ export default class TripPointsListPresenter {
   }
 
   init() {
-    render(this.#addingFormComponent, this.#listElement);
-    this.#pointsData.forEach((pointData) => {
-      render(new TripPointView(pointData), this.#listElement);
+    //render(this.#addingFormComponent, this.#listElement);
+    this.#renderPoints(this.#pointsData);
+  }
+
+  #renderPoints(pointsData) {
+    pointsData.forEach((pointData) => {
+      render(new TripPointView({
+        pointData,
+        pointTypes: this.#pointTypes,
+        cities: this.#cities
+      }), this.#listElement);
     });
   }
 }
