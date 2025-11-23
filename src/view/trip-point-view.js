@@ -1,4 +1,4 @@
-import {createElement} from '../render';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function getOffersTemplate(offersData) {
   return (
@@ -48,24 +48,15 @@ function getTripPointTemplate(pointData) {
             </li>`;
 }
 
-export default class TripPointView {
+export default class TripPointView extends AbstractView {
   #pointData = null;
+
   constructor(pointData) {
+    super();
     this.#pointData = pointData;
   }
 
-  getTemplate() {
+  get template() {
     return getTripPointTemplate(this.#pointData);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

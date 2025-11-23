@@ -1,4 +1,4 @@
-import {render} from '../render.js';
+import {render} from '../framework/render.js';
 import SortView from '../view/sort-view.js';
 import TripPointsListView from '../view/trip-points-list-view.js';
 import TripPointsListPresenter from './trip-points-list-presenter.js';
@@ -7,23 +7,23 @@ export default class TripPresenter {
   #tripContainer = null;
   #pointsModel = null;
   #sortComponent = null;
-  #tripPointsListComponent = null;
-  #tripPointsListPresenter = null;
+  #pointsListComponent = null;
+  #pointsListPresenter = null;
 
   constructor({tripContainer, pointsModel}) {
     this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
     this.#sortComponent = new SortView();
-    this.#tripPointsListComponent = new TripPointsListView();
-    this.#tripPointsListPresenter = new TripPointsListPresenter({
-      listElement: this.#tripPointsListComponent.getElement(),
-      pointsModel: this.#pointsModel
+    this.#pointsListComponent = new TripPointsListView();
+    this.#pointsListPresenter = new TripPointsListPresenter({
+      listElement: this.#pointsListComponent.element,
+      pointsModel: this.#pointsModel,
     });
   }
 
   init() {
     render(this.#sortComponent, this.#tripContainer);
-    render(this.#tripPointsListComponent, this.#tripContainer);
-    this.#tripPointsListPresenter.init();
+    render(this.#pointsListComponent, this.#tripContainer);
+    this.#pointsListPresenter.init();
   }
 }
