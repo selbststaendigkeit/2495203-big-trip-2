@@ -5,6 +5,10 @@ import {
 import TripPointAddingFormView from '../view/trip-point-adding-form-view.js';
 import TripPointView from '../view/trip-point-view.js';
 import TripPointEditingFormView from '../view/trip-point-editing-form-view.js';
+import {
+  EVT_KEYDOWN,
+  KEY_ESCAPE
+} from '../constants.js';
 
 export default class TripPointsListPresenter {
   #listElement = null;
@@ -28,7 +32,6 @@ export default class TripPointsListPresenter {
   }
 
   init() {
-    //render(this.#addingFormComponent, this.#listElement);
     this.#renderPoints(this.#pointsData);
   }
 
@@ -41,10 +44,10 @@ export default class TripPointsListPresenter {
 
   #renderPoint(pointData) {
     const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
+      if (evt.key === KEY_ESCAPE) {
         evt.preventDefault();
         replaceFormToPoint();
-        document.removeEventListener('keydown', escKeyDownHandler);
+        document.removeEventListener(EVT_KEYDOWN, escKeyDownHandler);
       }
     };
 
@@ -54,7 +57,7 @@ export default class TripPointsListPresenter {
       cities: this.#cities,
       onEditClick: () => {
         replacePointToForm();
-        document.addEventListener('keydown', escKeyDownHandler);
+        document.addEventListener(EVT_KEYDOWN, escKeyDownHandler);
       }
     });
 
@@ -62,10 +65,13 @@ export default class TripPointsListPresenter {
       pointData,
       pointTypes: this.#pointTypes,
       cities: this.#cities,
-      onFormSubmit: replaceFormToPoint,
+      onFormSubmit: () => {
+        replaceFormToPoint();
+        document.removeEventListener(EVT_KEYDOWN, escKeyDownHandler);
+      },
       onRollupButtonClick: () => {
         replaceFormToPoint();
-        document.removeEventListener('keydown', escKeyDownHandler);
+        document.removeEventListener(EVT_KEYDOWN, escKeyDownHandler);
       }
     });
 
