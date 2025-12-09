@@ -20,6 +20,10 @@ if (pointsModel.pointsCount) {
   }), mainInfoContainer);
 }
 render(new FilterView(), mainInfoContainer);
-render(new TripPointAddingButtonView(), mainInfoContainer);
+render(new TripPointAddingButtonView({
+  onButtonClick: () => {
+    tripPresenter.handleAddingButtonClick();
+  }
+}), mainInfoContainer);
 
 tripPresenter.init();

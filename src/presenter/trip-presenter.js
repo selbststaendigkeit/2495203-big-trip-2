@@ -37,6 +37,10 @@ export default class TripPresenter {
     this.#renderPointsList();
   }
 
+  handleAddingButtonClick() {
+    this.#pointsListPresenter.openAddingForm();
+  }
+
   #renderPointsList() {
     render(this.#sortComponent, this.#tripContainer);
     render(this.#pointsListComponent, this.#tripContainer);
@@ -46,4 +50,5 @@ export default class TripPresenter {
   #renderMessage() {
     render(this.#messageComponent, this.#tripContainer);
   }
+
 }

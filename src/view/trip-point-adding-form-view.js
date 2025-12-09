@@ -117,12 +117,21 @@ export default class TripPointAddingFormView extends AbstractView {
   #cities = null;
   #pointTypes = null;
   #blankPointData = null;
+  #form = null;
+  #cancelButton = null;
+
 
   constructor({cities, pointTypes, blankPoint}) {
     super();
     this.#cities = cities;
     this.#pointTypes = pointTypes;
     this.#blankPointData = blankPoint;
+
+    this.#form = this.element.querySelector('form');
+    this.#cancelButton = this.element.querySelector('.event__reset-btn');
+
+    this.#form.addEventListener('submit', this.#handleFormSubmit);
+    this.#cancelButton.addEventListener('click', this.#handleCancelButtonClick);
   }
 
   get template() {
@@ -132,4 +141,19 @@ export default class TripPointAddingFormView extends AbstractView {
       cities: this.#cities
     });
   }
+
+  removeElement() {
+    this.element.remove();
+  }
+
+  #handleFormSubmit = (evt) => {
+    evt.preventDefault();
+    this.removeElement();
+  };
+
+  #handleCancelButtonClick = (evt) => {
+    evt.preventDefault();
+    this.removeElement();
+  };
+
 }

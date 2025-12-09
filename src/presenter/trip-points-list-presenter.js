@@ -1,5 +1,6 @@
 import {
   render,
+  RenderPosition,
   replace
 } from '../framework/render.js';
 import TripPointAddingFormView from '../view/trip-point-adding-form-view.js';
@@ -24,17 +25,28 @@ export default class TripPointsListPresenter {
     this.#pointsData = this.#pointsModel.tripPoints;
     this.#pointTypes = this.#pointsModel.pointTypes;
     this.#cities = this.#pointsModel.cities;
+  }
+
+  init() {
+    if (this.#pointsData.length) {
+      this.#renderPoints(this.#pointsData);
+    }
+  }
+
+  openAddingForm() {
     this.#addingFormComponent = new TripPointAddingFormView({
       cities: this.#pointsModel.cities,
       pointTypes: this.#pointsModel.pointTypes,
       blankPoint: this.#pointsModel.blankPoint,
     });
+    render(this.#addingFormComponent, this.#listElement, RenderPosition.AFTERBEGIN);
   }
 
-  init() {
-    this.#renderPoints(this.#pointsData);
+  closeAddingForm() {
+    if (this.#addingFormComponent) {
+      this.#addingFormComponent.removeElement();
+    }
   }
-
 
   #renderPoints(pointsData) {
     pointsData.forEach((pointData) => {
@@ -85,4 +97,5 @@ export default class TripPointsListPresenter {
 
     render(pointComponent, this.#listElement);
   }
+
 }
