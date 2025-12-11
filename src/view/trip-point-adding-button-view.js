@@ -5,7 +5,22 @@ function createAddEventButtonTemplate() {
 }
 
 export default class TripPointAddingButtonView extends AbstractView {
+  #clickHandler = null;
+
+  constructor({onButtonClick}) {
+    super();
+    this.#clickHandler = onButtonClick;
+
+    this.element.addEventListener('click', this.#handleButtonClick);
+  }
+
   get template() {
     return createAddEventButtonTemplate();
   }
+
+  #handleButtonClick = (evt) => {
+    evt.preventDefault();
+    this.element.disabled = true;
+    this.#clickHandler();
+  };
 }
