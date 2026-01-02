@@ -1,15 +1,10 @@
 import {
   render,
   RenderPosition,
-  replace
 } from '../framework/render.js';
 import TripPointAddingFormView from '../view/trip-point-adding-form-view.js';
-import TripPointView from '../view/trip-point-view.js';
-import TripPointEditingFormView from '../view/trip-point-editing-form-view.js';
-import {
-  EVT_KEYDOWN,
-  KEY_ESCAPE
-} from '../constants.js';
+import PointPresenter from './point-presenter.js';
+import {replaceDataArrayItem} from '../utils.js';
 
 export default class TripPointsListPresenter {
   #listElement = null;
@@ -18,6 +13,7 @@ export default class TripPointsListPresenter {
   #pointTypes = null;
   #cities = null;
   #addingFormComponent = null;
+  #pointPresenters = new Map();
 
   constructor({listElement, pointsModel}) {
     this.#listElement = listElement;
@@ -55,47 +51,24 @@ export default class TripPointsListPresenter {
   }
 
   #renderPoint(pointData) {
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === KEY_ESCAPE) {
-        evt.preventDefault();
-        replaceFormToPoint();
-        document.removeEventListener(EVT_KEYDOWN, escKeyDownHandler);
-      }
-    };
-
-    const pointComponent = new TripPointView({
-      pointData,
-      pointTypes: this.#pointTypes,
-      cities: this.#cities,
-      onEditClick: () => {
-        replacePointToForm();
-        document.addEventListener(EVT_KEYDOWN, escKeyDownHandler);
-      }
+    const pointPresenter = new PointPresenter({
+      listElement: this.#listElement,
+      handleDataChange: this.#handlePointChange,
+      handlePointEditClick: this.#resetAllEditForms
     });
 
-    const editFormComponent = new TripPointEditingFormView({
-      pointData,
-      pointTypes: this.#pointTypes,
-      cities: this.#cities,
-      onFormSubmit: () => {
-        replaceFormToPoint();
-        document.removeEventListener(EVT_KEYDOWN, escKeyDownHandler);
-      },
-      onRollupButtonClick: () => {
-        replaceFormToPoint();
-        document.removeEventListener(EVT_KEYDOWN, escKeyDownHandler);
-      }
-    });
-
-    function replacePointToForm() {
-      replace(editFormComponent, pointComponent);
-    }
-
-    function replaceFormToPoint() {
-      replace(pointComponent, editFormComponent);
-    }
-
-    render(pointComponent, this.#listElement);
+    pointPresenter.init(pointData, this.#pointTypes, this.#cities);
+    this.#pointPresenters.set(pointData.id, pointPresenter);
   }
 
+  #handlePointChange = (changedPoint) => {
+    this.#pointsData = replaceDataArrayItem(this.#pointsData, changedPoint);
+    this.#pointPresenters.get(changedPoint.id).init(changedPoint, this.#pointTypes, this.#cities);
+  };
+
+  #resetAllEditForms = () => {
+    this.#pointPresenters.forEach((point) => {
+      point.resetForm();
+    });
+  };
 }
