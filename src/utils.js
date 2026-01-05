@@ -112,3 +112,7 @@ export function sortByDurationAsc(a, b) {
 
   return firstDuration - secondDuration;
 }
+
+export function getTypeIconSrc(typeName) {
+  return `img/icons/${typeName}.png`;
+}

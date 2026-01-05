@@ -18,7 +18,7 @@ function getTripPointTemplate(pointData) {
               <div class="event">
                 <time class="event__date" datetime="${pointData.htmlStartDate}">${pointData.formattedDate}</time>
                 <div class="event__type">
-                  <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+                  <img class="event__type-icon" width="42" height="42" src="img/icons/${pointData.type.name}.png" alt="${pointData.type.name}">
                 </div>
                 <h3 class="event__title">${pointData.type.name} ${pointData.destination.cityName}</h3>
                 <div class="event__schedule">
