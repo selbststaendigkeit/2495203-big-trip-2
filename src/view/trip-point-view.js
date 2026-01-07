@@ -1,15 +1,21 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 function getOffersTemplate(offersData) {
+  if (!offersData.some(({checked}) => checked)) {
+    return '';
+  }
+
   return (
     `<ul class="event__selected-offers">
-        ${offersData.map(({name, price}) => `<li class="event__offer">
-            <span class="event__offer-title">${name}</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">${price}</span>
-          </li>
-        `).join('')}
-      </ul>`
+      ${offersData.map(({name, price, checked}) => checked ?
+      `<li class="event__offer">
+          <span class="event__offer-title">${name}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${price}</span>
+        </li>` :
+      '')
+      .join('')}
+    </ul>`
   );
 }
 

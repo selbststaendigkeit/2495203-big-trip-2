@@ -1,8 +1,10 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {
-  capitalizeFirstLetter,
-  getTypeIconSrc
-} from '../utils.js';
+  destinationInputHandler,
+  offerClickHandler,
+  priceInputHandler,
+  typeChangeHandler
+} from '../form-handlers.js';
 
 function getPointDetails(state) {
   if (!(state.type.options || state.destination.description)) {
@@ -32,9 +34,14 @@ function getOffersTemplate(offers) {
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
       <div class="event__available-offers">
-        ${offers.map(({id, name, alias, price}) => `
+        ${offers.map(({id, name, alias, price, checked}) => `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${alias}" type="checkbox" name="event-offer-${alias}" value="${id}">
+            <input class="event__offer-checkbox  visually-hidden"
+            id="event-offer-${alias}"
+            type="checkbox"
+            name="event-offer-${alias}"
+            value="${id}"
+            ${checked ? 'checked' : ''}>
             <label class="event__offer-label" for="event-offer-${alias}">
               <span class="event__offer-title">${name}</span>
               &plus;&euro;&nbsp;
@@ -162,6 +169,34 @@ export default class TripPointEditingFormView extends AbstractStatefulView {
     return getEditFormTemplate(this._state, this.#pointTypes, this.#cities);
   }
 
+  get state() {
+    return this._state;
+  }
+
+  get pointTypes() {
+    return this.#pointTypes;
+  }
+
+  get cities() {
+    return this.#cities;
+  }
+
+  get typesOutput() {
+    return this.#typeOutput;
+  }
+
+  get typeIcon() {
+    return this.#typeIcon;
+  }
+
+  get typeToggler() {
+    return this.#typeToggler;
+  }
+
+  set state(update) {
+    this._setState(update);
+  }
+
   _restoreHandlers() {
     this.#setHandlers();
   }
@@ -184,16 +219,16 @@ export default class TripPointEditingFormView extends AbstractStatefulView {
     this.#form.addEventListener('submit', this.#formSubmitHandler);
     this.#rollupButton.addEventListener('click', this.#rollupButtonClickHandler);
     this.#typesDropdown.addEventListener('change', (evt) => {
-      this.#typeChangeHandler(evt);
+      typeChangeHandler({evt, component: this});
     });
     this.#destinationInput.addEventListener('input', (evt) => {
-      this.#destinationInputHandler(evt);
+      destinationInputHandler({evt, component: this});
     });
     this.#priceInput.addEventListener('input', (evt) => {
-      this.#priceInputHandler(evt);
+      priceInputHandler({evt, component: this});
     });
     this.#offersContainer?.addEventListener('change', (evt) => {
-      this.#offerClickHandler(evt);
+      offerClickHandler({evt, component: this});
     });
   };
 
@@ -211,53 +246,5 @@ export default class TripPointEditingFormView extends AbstractStatefulView {
   #rollupButtonClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleRollupButtonClick();
-  };
-
-  #typeChangeHandler = (evt) => {
-    const chosenTypeId = evt.target.value;
-    const chosenTypeName = this.#pointTypes[chosenTypeId].name;
-
-    this.updateElement({
-      type: this.#pointTypes[chosenTypeId]
-    });
-    this.#typeOutput.textContent = capitalizeFirstLetter(chosenTypeName);
-    this.#typeIcon.src = getTypeIconSrc(chosenTypeName);
-    this.#typeToggler.checked = false;
-  };
-
-  #destinationInputHandler = (evt) => {
-    const input = evt.target;
-    const value = input.value;
-    const allowedCities = this.#cities.map(({cityName}) => cityName);
-
-    if (!allowedCities.includes(value)) {
-      input.setCustomValidity(`Allowed cities: ${allowedCities.map((city) => city).join(', ')}`);
-      return;
-    }
-
-    input.setCustomValidity('');
-    this.updateElement({
-      destination: this.#cities.find(({cityName}) => cityName === value)
-    });
-  };
-
-  #priceInputHandler = (evt) => {
-    const newPrice = evt.target.value;
-
-    this._setState({
-      price: newPrice
-    });
-  };
-
-  #offerClickHandler = (evt) => {
-    const clickedOffer = evt.target;
-    const clickedOfferId = clickedOffer.value;
-    const typeCopy = structuredClone(this._state.type);
-    const targetOption = typeCopy.options.find(({id}) => id === Number(clickedOfferId));
-
-    targetOption.checked = clickedOffer.checked;
-    this._setState({
-      type: typeCopy
-    });
   };
 }

@@ -8,7 +8,7 @@ const pointTypes = [
         name: 'First',
         alias: '1',
         price: 10,
-        checked: false
+        checked: true
       },
       {
         id: 2,
