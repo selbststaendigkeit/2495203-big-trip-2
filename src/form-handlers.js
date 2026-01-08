@@ -1,6 +1,6 @@
 import {
   capitalizeFirstLetter,
-  getTypeIconSrc
+  getIconSrcByEventType
 } from './utils.js';
 
 export function typeChangeHandler({evt, component}) {
@@ -12,7 +12,7 @@ export function typeChangeHandler({evt, component}) {
     type: component.pointTypes[chosenTypeId]
   });
   component.typesOutput.textContent = capitalizeFirstLetter(chosenTypeName);
-  component.typeIcon.src = getTypeIconSrc(chosenTypeName);
+  component.typeIcon.src = getIconSrcByEventType(chosenTypeName);
   component.typeToggler.checked = false;
 }
 

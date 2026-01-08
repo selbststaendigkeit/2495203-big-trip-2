@@ -8,7 +8,7 @@ import {
 
 function getPointDetails(state) {
   if (!(state.type.options || state.destination.description)) {
-    return;
+    return '';
   }
 
   return (
