@@ -5,7 +5,6 @@ import {
 import TripPointAddingFormView from '../view/trip-point-adding-form-view.js';
 import PointPresenter from './point-presenter.js';
 import {
-  replaceArrayItem,
   sortByDateAsc,
   sortByDurationAsc,
   sortByPriceAsc
@@ -20,8 +19,6 @@ const SortCriteria = {
 export default class TripPointsListPresenter {
   #listElement = null;
   #pointsModel = null;
-  #originPointsData = null;
-  #pointsData = null;
   #pointTypes = null;
   #cities = null;
   #addButtonComponent = null;
@@ -32,16 +29,32 @@ export default class TripPointsListPresenter {
   constructor({listElement, pointsModel}) {
     this.#listElement = listElement;
     this.#pointsModel = pointsModel;
-    this.#originPointsData = [...this.#pointsModel.tripPoints];
-    this.#pointsData = [...this.#pointsModel.tripPoints];
     this.#pointTypes = this.#pointsModel.pointTypes;
     this.#cities = this.#pointsModel.cities;
+
+    this.#pointsModel.setpointEditObserver(this.#handleModelPointChange);
+  }
+
+  get points() {
+    switch (this.#currentSortCriteria) {
+      case SortCriteria.DURATION: {
+        return [...this.#pointsModel.tripPoints.sort(sortByDurationAsc)];
+      }
+      case SortCriteria.PRICE: {
+        return [...this.#pointsModel.tripPoints.sort(sortByPriceAsc)];
+      }
+      case SortCriteria.START_DAY: {
+        return [...this.#pointsModel.tripPoints.sort(sortByDateAsc)];
+      }
+    }
+
+    return [...this.#pointsModel.tripPoints];
   }
 
   init({addButtonView}) {
     this.#addButtonComponent = addButtonView;
-    if (this.#pointsData.length) {
-      this.#renderPoints(this.#pointsData);
+    if (this.points.length) {
+      this.#renderPoints(this.points);
     }
   }
 
@@ -63,7 +76,13 @@ export default class TripPointsListPresenter {
     }
 
     this.#currentSortCriteria = sortCriteria;
-    this.#applySort(sortCriteria);
+    this.#rerenderPoints();
+  };
+
+  clearPointsList = () => {
+    this.#pointPresenters.forEach((point) => {
+      point.destroy();
+    });
   };
 
   #enableButton() {
@@ -93,44 +112,22 @@ export default class TripPointsListPresenter {
     });
   };
 
-  #clearPointsList = () => {
-    this.#pointPresenters.forEach((point) => {
-      point.destroy();
-    });
-  };
-
-  #applySort = (sortCriteria) => {
-    switch (sortCriteria) {
-      case SortCriteria.DURATION: {
-        this.#pointsData.sort(sortByDurationAsc);
-        break;
-      }
-      case SortCriteria.PRICE: {
-        this.#pointsData.sort(sortByPriceAsc);
-        break;
-      }
-      case SortCriteria.START_DAY: {
-        this.#pointsData.sort(sortByDateAsc);
-        break;
-      }
-    }
-    this.#clearPointsList();
-    this.#renderPoints(this.#pointsData);
+  #rerenderPoints = () => {
+    this.clearPointsList();
+    this.#renderPoints(this.points);
   };
 
   #handlePointChange = (changedPoint) => {
-    this.#pointsData = replaceArrayItem(this.#pointsData, changedPoint);
-    this.#originPointsData = replaceArrayItem(this.#originPointsData, changedPoint);
+    this.#pointsModel.updatePoint(changedPoint);
+  };
+
+  #handleModelPointChange = (changedPoint) => {
     this.#pointPresenters.get(changedPoint.id).init(changedPoint, this.#pointTypes, this.#cities);
-    this.#applySort(this.#currentSortCriteria);
+    this.#rerenderPoints();
   };
 
   #handleAddFormSubmit = (pointData) => {
-    this.#addNewPoint(pointData);
+    this.#pointsModel.addPoint(pointData);
     this.#enableButton();
   };
-
-  #addNewPoint(pointData) {
-    return pointData;
-  }
 }

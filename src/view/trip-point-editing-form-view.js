@@ -157,6 +157,8 @@ export default class TripPointEditingFormView extends AbstractStatefulView {
   #destinationInput = null;
   #priceInput = null;
   #offersContainer = null;
+  #startPicker = null;
+  #endPicker = null;
 
   constructor({pointData, pointTypes, cities, onFormSubmit, onRollupButtonClick}) {
     super();
@@ -197,12 +199,42 @@ export default class TripPointEditingFormView extends AbstractStatefulView {
     return this.#typeToggler;
   }
 
+  get startPicker() {
+    return this.#startPicker;
+  }
+
+  get endPicker() {
+    return this.#endPicker;
+  }
+
+  set startPicker(pickerInstance) {
+    this.#startPicker = pickerInstance;
+  }
+
+  set endPicker(pickerInstance) {
+    this.#endPicker = pickerInstance;
+  }
+
   set state(update) {
     this._setState(update);
   }
 
   _restoreHandlers() {
     this.#setHandlers();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#startPicker) {
+      this.#startPicker.destroy();
+      this.#startPicker = null;
+    }
+
+    if (this.#endPicker) {
+      this.#endPicker.destroy();
+      this.#endPicker = null;
+    }
   }
 
   parseStateToPointData() {

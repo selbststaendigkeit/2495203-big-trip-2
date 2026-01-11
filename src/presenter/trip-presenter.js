@@ -10,14 +10,12 @@ export default class TripPresenter {
   #sortComponent = null;
   #pointsListComponent = null;
   #pointsListPresenter = null;
-  #pointsCount = null;
   #messageComponent = null;
   #addButtonComponent = null;
 
   constructor({tripContainer, pointsModel}) {
     this.#pointsModel = pointsModel;
     this.#tripContainer = tripContainer;
-    this.#pointsCount = this.#pointsModel.pointsCount;
     this.#pointsListComponent = new TripPointsListView();
     this.#pointsListPresenter = new TripPointsListPresenter({
       listElement: this.#pointsListComponent.element,
@@ -27,11 +25,13 @@ export default class TripPresenter {
       onSortChange: this.#pointsListPresenter.handleSortChange
     });
     this.#messageComponent = new MessageView();
+
+    this.#pointsModel.setpointAddObserver(this.#handleModelPointAdd);
   }
 
   init({addButtonView}) {
     this.#addButtonComponent = addButtonView;
-    if (!this.#pointsCount) {
+    if (!this.#pointsModel.pointsCount) {
       this.#renderMessage();
       return;
     }
@@ -61,4 +61,9 @@ export default class TripPresenter {
   #removeMessage() {
     this.#messageComponent.removeElement();
   }
+
+  #handleModelPointAdd = () => {
+    this.#pointsListPresenter.clearPointsList();
+    this.init({addButtonView: this.#addButtonComponent});
+  };
 }

@@ -43,9 +43,14 @@ function getOffers(offersData) {
     `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
-        ${offersData.map(({id, name, price, alias}) => `
+        ${offersData.map(({id, name, price, alias, checked}) => `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${alias}" type="checkbox" name="event-offer-${alias}" value="${id}">
+            <input class="event__offer-checkbox  visually-hidden"
+            id="event-offer-${alias}"
+            type="checkbox"
+            name="event-offer-${alias}"
+            value="${id}"
+            ${checked ? 'checked' : ''}>
             <label class="event__offer-label" for="event-offer-${alias}">
               <span class="event__offer-title">${name}</span>
               &plus;&euro;&nbsp;
@@ -99,11 +104,11 @@ function getAddTripPointFormTemplate({state, pointTypes, cities}) {
             <form class="event event--edit" action="#" method="post">
               <header class="event__header">
                 <div class="event__type-wrapper">
-                  <label class="event__type  event__type-btn" for="event-type-toggle-1">
+                  <label class="event__type  event__type-btn" for="event-type-toggle">
                     <span class="visually-hidden">Choose event type</span>
-                    <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+                    <img class="event__type-icon" width="17" height="17" src="img/icons/${state.type.name}.png" alt="${state.type.name}">
                   </label>
-                  <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+                  <input class="event__type-toggle  visually-hidden" id="event-type-toggle" type="checkbox">
 
                   ${getEventTypesListTemplate(pointTypes)}
                 </div>
@@ -170,6 +175,8 @@ export default class TripPointAddingFormView extends AbstractStatefulView {
   #priceInput = null;
   #offersContainer = null;
   #addButtonView = null;
+  #startPicker = null;
+  #endPicker = null;
 
   constructor({cities, pointTypes, blankPoint, onFormSubmit, addButtonView}) {
     super();
@@ -214,12 +221,42 @@ export default class TripPointAddingFormView extends AbstractStatefulView {
     return this.#typeToggler;
   }
 
+  get startPicker() {
+    return this.#startPicker;
+  }
+
+  get endPicker() {
+    return this.#endPicker;
+  }
+
+  set startPicker(pickerInstance) {
+    this.#startPicker = pickerInstance;
+  }
+
+  set endPicker(pickerInstance) {
+    this.#endPicker = pickerInstance;
+  }
+
   set state(update) {
     this._setState(update);
   }
 
   _restoreHandlers() {
     this.#setHandlers();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#startPicker) {
+      this.#startPicker.destroy();
+      this.#startPicker = null;
+    }
+
+    if (this.#endPicker) {
+      this.#endPicker.destroy();
+      this.#endPicker = null;
+    }
   }
 
   #setHandlers = () => {

@@ -13,8 +13,9 @@ import {
   sortByDateAsc
 } from '../utils.js';
 import {MAIN_INFO_MAX_CITIES} from '../constants.js';
+import Observable from '../framework/observable.js';
 
-export default class PointsModel {
+export default class PointsModel extends Observable {
   #tripPoints = mockPoints;
   #blankPoint = blankPoint;
   #pointTypes = pointTypes;
@@ -22,8 +23,11 @@ export default class PointsModel {
   #adaptedPointsData = null;
   #adaptedBlankPointData = null;
   #adaptedPointTypesData = null;
+  #pointEditObserver = null;
+  #pointAddObserver = null;
 
   constructor() {
+    super();
     this.init();
   }
 
@@ -54,10 +58,33 @@ export default class PointsModel {
     };
   }
 
+  setpointEditObserver(observer) {
+    this.#pointEditObserver = observer;
+  }
+
+  setpointAddObserver(observer) {
+    this.#pointAddObserver = observer;
+  }
+
   init() {
     this.#adaptPointsData();
     this.#adaptBlankPointData();
     this.#adaptPointTypesData();
+  }
+
+  updatePoint(changedData) {
+    this.#adaptedPointsData = [...this.#adaptedPointsData.map((item) => item.id === changedData.id ? changedData : item)];
+
+    this.#pointEditObserver(changedData);
+  }
+
+  addPoint(pointData) {
+    this.#adaptedPointsData = [
+      ...this.#adaptedPointsData,
+      pointData
+    ];
+
+    this.#pointAddObserver();
   }
 
   #adaptPointsData() {

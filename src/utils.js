@@ -96,10 +96,6 @@ export function capitalizeFirstLetter(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-export function replaceArrayItem(items, newItem) {
-  return items.map((item) => item.id === newItem.id ? newItem : item);
-}
-
 export function sortByDateAsc(a, b) {
   return a.startDate - b.startDate;
 }
@@ -123,14 +119,17 @@ export function initFlatpickr(component) {
   const startInput = component.element.querySelector('#event-start-time');
   const endInput = component.element.querySelector('#event-end-time');
 
-  flatpickr(startInput, {
+  component.startPicker = flatpickr(startInput, {
     defaultDate: component.state.startDate ?? '',
     defaultHour: component.state.startTime ? component.state.startTime.split(':')[0] : '',
     defaultMinute: component.state.startTime ? component.state.startTime.split(':')[1] : '',
     enableTime: true,
     dateFormat: 'd/m/Y H:i',
     minDate: 'today',
-    onChange: (selectedDates) => {
+    onOpen: (selectedDates, dateStr, instance) => {
+      instance.setDate(instance.config.now, true, instance.config.dateFormat);
+    },
+    onClose: (selectedDates) => {
       const newDate = selectedDates[0];
       const isToChangeEndDate = newDate > component.state.endDate;
 
@@ -154,15 +153,17 @@ export function initFlatpickr(component) {
       };
     }
   });
-
-  flatpickr(endInput, {
+  component.endPicker = flatpickr(endInput, {
     defaultDate: component.state.endDate ?? '',
     defaultHour: component.state.endTime ? component.state.endTime.split(':')[0] : '',
     defaultMinute: component.state.endTime ? component.state.endTime.split(':')[1] : '',
     enableTime: true,
     dateFormat: 'd/m/Y H:i',
     minDate: component.state.startDate ?? 'today',
-    onChange: (selectedDates) => {
+    onOpen: (selectedDates, dateStr, instance) => {
+      instance.setDate(component.startPicker.selectedDates[0] ?? instance.config.now, true, instance.config.dateFormat);
+    },
+    onClose: (selectedDates) => {
       const newDate = selectedDates[0];
 
       component.updateElement({
@@ -170,6 +171,7 @@ export function initFlatpickr(component) {
         startDate: component.state.startDate ?? newDate,
         endDateISO: newDate.toISOString(),
         startDateISO: component.state.startDateISO ?? newDate.toISOString(),
+        formattedDate: getTripPointFormattedDate(component.state.startDate ?? newDate),
         htmlEndDate: getHTMLDatetime(newDate),
         htmlStartDate: component.state.htmlStartDate ?? getHTMLDatetime(newDate),
         duration: formatDateDifference(component.state.startDate ?? newDate, newDate),
