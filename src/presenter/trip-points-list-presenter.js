@@ -32,7 +32,8 @@ export default class TripPointsListPresenter {
     this.#pointTypes = this.#pointsModel.pointTypes;
     this.#cities = this.#pointsModel.cities;
 
-    this.#pointsModel.setpointEditObserver(this.#handleModelPointChange);
+    this.#pointsModel.setPointEditObserver(this.#handleModelPointChange);
+    this.#pointsModel.setPointRemoveObserver(this.#handleModelPointRemove);
   }
 
   get points() {
@@ -53,9 +54,7 @@ export default class TripPointsListPresenter {
 
   init({addButtonView}) {
     this.#addButtonComponent = addButtonView;
-    if (this.points.length) {
-      this.#renderPoints(this.points);
-    }
+    this.#renderPoints(this.points);
   }
 
   openAddingForm() {
@@ -83,6 +82,7 @@ export default class TripPointsListPresenter {
     this.#pointPresenters.forEach((point) => {
       point.destroy();
     });
+    this.#pointPresenters.clear();
   };
 
   #enableButton() {
@@ -90,16 +90,22 @@ export default class TripPointsListPresenter {
   }
 
   #renderPoints(pointsData) {
-    pointsData.forEach((pointData) => {
-      this.#renderPoint(pointData);
-    });
+    if (pointsData.length) {
+      pointsData.forEach((pointData) => {
+        this.#renderPoint(pointData);
+      });
+      return;
+    }
+
+    console.log('no points');
   }
 
   #renderPoint(pointData) {
     const pointPresenter = new PointPresenter({
       listElement: this.#listElement,
       handleDataChange: this.#handlePointChange,
-      handlePointEditClick: this.#resetAllForms
+      handlePointEditClick: this.#resetAllForms,
+      handleDeleteClick: this.#handleDeleteClick,
     });
 
     pointPresenter.init(pointData, this.#pointTypes, this.#cities);
@@ -121,13 +127,21 @@ export default class TripPointsListPresenter {
     this.#pointsModel.updatePoint(changedPoint);
   };
 
+  #handleAddFormSubmit = (pointData) => {
+    this.#pointsModel.addPoint(pointData);
+    this.#enableButton();
+  };
+
+  #handleDeleteClick = (pointId) => {
+    this.#pointsModel.removePoint(pointId);
+  };
+
   #handleModelPointChange = (changedPoint) => {
     this.#pointPresenters.get(changedPoint.id).init(changedPoint, this.#pointTypes, this.#cities);
     this.#rerenderPoints();
   };
 
-  #handleAddFormSubmit = (pointData) => {
-    this.#pointsModel.addPoint(pointData);
-    this.#enableButton();
+  #handleModelPointRemove = () => {
+    this.#rerenderPoints();
   };
 }

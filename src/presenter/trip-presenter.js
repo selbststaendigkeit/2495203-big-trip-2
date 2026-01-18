@@ -26,7 +26,7 @@ export default class TripPresenter {
     });
     this.#messageComponent = new MessageView();
 
-    this.#pointsModel.setpointAddObserver(this.#handleModelPointAdd);
+    this.#pointsModel.setPointAddObserver(this.#handleModelPointAdd);
   }
 
   init({addButtonView}) {

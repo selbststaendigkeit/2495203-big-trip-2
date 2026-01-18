@@ -21,13 +21,15 @@ export default class PointPresenter {
   #pointData = null;
   #handleDataChange = null;
   #handleEditClick = null;
+  #handleDeleteClick = null;
   #defaultMode = Mode.VIEW;
   #mode = this.#defaultMode;
 
-  constructor({listElement, handleDataChange, handlePointEditClick}) {
+  constructor({listElement, handleDataChange, handlePointEditClick, handleDeleteClick}) {
     this.#listElement = listElement;
     this.#handleDataChange = handleDataChange;
     this.#handleEditClick = handlePointEditClick;
+    this.#handleDeleteClick = handleDeleteClick;
   }
 
   init(pointData, pointTypes, cities) {
@@ -55,7 +57,8 @@ export default class PointPresenter {
       onRollupButtonClick: () => {
         this.#replaceFormToPoint();
         document.removeEventListener(EVT_KEYDOWN, this.#escKeyDownHandler);
-      }
+      },
+      onDeleteClick: this.#handleDeleteClick
     });
     this.#pointData = pointData;
 

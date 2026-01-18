@@ -13,9 +13,8 @@ import {
   sortByDateAsc
 } from '../utils.js';
 import {MAIN_INFO_MAX_CITIES} from '../constants.js';
-import Observable from '../framework/observable.js';
 
-export default class PointsModel extends Observable {
+export default class PointsModel {
   #tripPoints = mockPoints;
   #blankPoint = blankPoint;
   #pointTypes = pointTypes;
@@ -25,9 +24,9 @@ export default class PointsModel extends Observable {
   #adaptedPointTypesData = null;
   #pointEditObserver = null;
   #pointAddObserver = null;
+  #pointRemoveObserver = null;
 
   constructor() {
-    super();
     this.init();
   }
 
@@ -58,12 +57,16 @@ export default class PointsModel extends Observable {
     };
   }
 
-  setpointEditObserver(observer) {
+  setPointEditObserver(observer) {
     this.#pointEditObserver = observer;
   }
 
-  setpointAddObserver(observer) {
+  setPointAddObserver(observer) {
     this.#pointAddObserver = observer;
+  }
+
+  setPointRemoveObserver(observer) {
+    this.#pointRemoveObserver = observer;
   }
 
   init() {
@@ -85,6 +88,13 @@ export default class PointsModel extends Observable {
     ];
 
     this.#pointAddObserver();
+  }
+
+  removePoint(pointId) {
+    const pointToDelete = this.#adaptedPointsData.find((point) => point.id === pointId);
+
+    this.#adaptedPointsData.splice(this.#adaptedPointsData.indexOf(pointToDelete), 1);
+    this.#pointRemoveObserver();
   }
 
   #adaptPointsData() {
@@ -157,8 +167,8 @@ export default class PointsModel extends Observable {
       });
       return result;
     }
-    result = `${cityNames[0]} &mdash; ... &mdash; ${cityNames[cityNames.length - 1]}`;
 
+    result = `${cityNames[0]} &mdash; ... &mdash; ${cityNames[cityNames.length - 1]}`;
     return result;
   }
 }

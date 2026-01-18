@@ -150,6 +150,7 @@ export default class TripPointEditingFormView extends AbstractStatefulView {
   #rollupButton = null;
   #handleFormSubmit = null;
   #handleRollupButtonClick = null;
+  #handleDeleteButtonClick = null;
   #typeToggler = null;
   #typesDropdown = null;
   #typeOutput = null;
@@ -159,14 +160,16 @@ export default class TripPointEditingFormView extends AbstractStatefulView {
   #offersContainer = null;
   #startPicker = null;
   #endPicker = null;
+  #deleteButton = null;
 
-  constructor({pointData, pointTypes, cities, onFormSubmit, onRollupButtonClick}) {
+  constructor({pointData, pointTypes, cities, onFormSubmit, onRollupButtonClick, onDeleteClick}) {
     super();
     this._setState(this.#parsePointDataToState(pointData));
     this.#pointTypes = pointTypes;
     this.#cities = cities;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleRollupButtonClick = onRollupButtonClick;
+    this.#handleDeleteButtonClick = onDeleteClick;
 
     this.#setHandlers();
   }
@@ -251,9 +254,12 @@ export default class TripPointEditingFormView extends AbstractStatefulView {
     this.#destinationInput = this.element.querySelector('.event__input--destination');
     this.#priceInput = this.element.querySelector('.event__input--price');
     this.#offersContainer = this.element.querySelector('.event__available-offers');
+    this.#deleteButton = this.element.querySelector('.event__reset-btn');
 
     this.#form.addEventListener('submit', this.#formSubmitHandler);
     this.#rollupButton.addEventListener('click', this.#rollupButtonClickHandler);
+    this.#deleteButton.addEventListener('click', this.#deleteButtonClickHandler);
+
     this.#typesDropdown.addEventListener('change', (evt) => {
       typeChangeHandler({evt, component: this});
     });
@@ -284,5 +290,9 @@ export default class TripPointEditingFormView extends AbstractStatefulView {
   #rollupButtonClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleRollupButtonClick();
+  };
+
+  #deleteButtonClickHandler = () => {
+    this.#handleDeleteButtonClick(this.state.id);
   };
 }
