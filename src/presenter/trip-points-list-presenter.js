@@ -1,4 +1,5 @@
 import {
+  remove,
   render,
   RenderPosition,
 } from '../framework/render.js';
@@ -10,9 +11,11 @@ import {
   sortByPriceAsc
 } from '../utils.js';
 import {SortCriteria} from '../constants.js';
+import MessageView from '../view/message-view';
 
 export default class TripPointsListPresenter {
   #listElement = null;
+  #tripContainer = null;
   #pointsModel = null;
   #pointTypes = null;
   #cities = null;
@@ -20,9 +23,11 @@ export default class TripPointsListPresenter {
   #addingFormComponent = null;
   #pointPresenters = new Map();
   #currentSortCriteria = SortCriteria.START_DAY;
+  #noPointsMessageView = null;
 
-  constructor({listElement, pointsModel}) {
+  constructor({listElement, pointsModel, tripContainer}) {
     this.#listElement = listElement;
+    this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
     this.#pointTypes = this.#pointsModel.pointTypes;
     this.#cities = this.#pointsModel.cities;
@@ -62,6 +67,7 @@ export default class TripPointsListPresenter {
       addButtonView: this.#addButtonComponent
     });
     this.#resetAllForms();
+    this.handleSortChange(SortCriteria.START_DAY);
     render(this.#addingFormComponent, this.#listElement, RenderPosition.AFTERBEGIN);
   }
 
@@ -79,7 +85,15 @@ export default class TripPointsListPresenter {
       point.destroy();
     });
     this.#pointPresenters.clear();
+    this.removeMessage();
   };
+
+  removeMessage() {
+    if (this.#noPointsMessageView !== null) {
+      remove(this.#noPointsMessageView);
+      this.#noPointsMessageView = null;
+    }
+  }
 
   #enableButton() {
     this.#addButtonComponent.element.disabled = false;
@@ -93,7 +107,7 @@ export default class TripPointsListPresenter {
       return;
     }
 
-    console.log('no points');
+    this.#renderMessage(this.#pointsModel.currentFilter);
   }
 
   #renderPoint(pointData) {
@@ -118,6 +132,11 @@ export default class TripPointsListPresenter {
     this.clearPointsList();
     this.#renderPoints(this.points);
   };
+
+  #renderMessage(filter) {
+    this.#noPointsMessageView = new MessageView({currentFilter: filter});
+    render(this.#noPointsMessageView, this.#tripContainer);
+  }
 
   #handlePointChange = (changedPoint) => {
     this.#pointsModel.updatePoint(changedPoint);

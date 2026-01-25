@@ -1,25 +1,21 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import {NoPointsMessage} from '../constants';
 
-function getMessageTemplate() {
+function getMessageTemplate(filter) {
   return (
-    `<p class="trip-events__msg">Click New Event to create your first point</p>
-
-    <!--
-      Значение отображаемого текста зависит от выбранного фильтра:
-        * Everything – 'Click New Event to create your first point'
-        * Past — 'There are no past events now';
-        * Present — 'There are no present events now';
-        * Future — 'There are no future events now'.
-    -->`
+    `<p class="trip-events__msg">${NoPointsMessage[filter.toUpperCase()]}</p>`
   );
 }
 
 export default class MessageView extends AbstractView {
-  get template() {
-    return getMessageTemplate();
+  #currentFilter = null;
+
+  constructor({currentFilter}) {
+    super();
+    this.#currentFilter = currentFilter;
   }
 
-  removeElement() {
-    this.element.remove();
+  get template() {
+    return getMessageTemplate(this.#currentFilter);
   }
 }

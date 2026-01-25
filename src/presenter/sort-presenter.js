@@ -10,7 +10,7 @@ export default class SortPresenter {
   constructor({tripContainer, handleSortChange, pointsModel}) {
     this.#tripContainer = tripContainer;
     this.#handleSortChange = handleSortChange;
-    this.#sortView = new SortView({onSortChange: handleSortChange});
+    this.#sortView = new SortView({onSortChange: this.#handleSortChange});
     this.#pointsModel = pointsModel;
 
     this.#pointsModel.setFilterChangeSortObserver(this.#onModelFilterChange);

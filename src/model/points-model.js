@@ -69,6 +69,10 @@ export default class PointsModel {
     };
   }
 
+  get currentFilter() {
+    return this.#currentFilter;
+  }
+
   setPointEditObserver(observer) {
     this.#pointEditObserver = observer;
   }

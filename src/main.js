@@ -28,9 +28,8 @@ if (pointsModel.pointsCount) {
   render(new TripMainInfoView({
     mainInfo: pointsModel.mainInfo
   }), mainInfoContainer);
-
-  filterPresenter.init();
 }
+filterPresenter.init();
 render(addButtonView, mainInfoContainer);
 
 tripPresenter.init({addButtonView});

@@ -7,6 +7,7 @@ import {
   typeChangeHandler
 } from '../form-handlers.js';
 import {nanoid} from 'nanoid';
+import he from 'he';
 import {initFlatpickr} from '../utils.js';
 
 function getDetailsTemplate(state) {
@@ -67,7 +68,7 @@ function getDescription(destination) {
   return (
     `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${destination.description}</p>
+      <p class="event__destination-description">${he.encode(destination.description)}</p>
       ${getPhotosList(destination)}
     </section>`
   );

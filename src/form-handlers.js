@@ -36,7 +36,7 @@ export function priceInputHandler({evt, component}) {
   const newPrice = evt.target.value;
 
   component.state = {
-    price: newPrice
+    price: parseInt(newPrice, 10)
   };
 }
 

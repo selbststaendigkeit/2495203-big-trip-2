@@ -1,6 +1,6 @@
 import {
   EVT_KEYDOWN,
-  KEY_ESCAPE
+  KEY_ESCAPE, Mode
 } from '../constants.js';
 import {
   remove,
@@ -10,10 +10,6 @@ import {
 import TripPointView from '../view/trip-point-view.js';
 import TripPointEditingFormView from '../view/trip-point-editing-form-view.js';
 
-const Mode = {
-  VIEW: 'VIEW',
-  EDIT: 'EDIT'
-};
 export default class PointPresenter {
   #pointComponent = null;
   #editFormComponent = null;

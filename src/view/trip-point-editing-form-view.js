@@ -5,10 +5,10 @@ import {
   priceInputHandler,
   typeChangeHandler
 } from '../form-handlers.js';
-
 import {
   initFlatpickr
 } from '../utils.js';
+import he from 'he';
 
 function getPointDetails(state) {
   if (!(state.type.options || state.destination.description)) {
@@ -27,7 +27,7 @@ function getDescriptionTemplate(description) {
   return (
     `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
+        <p class="event__destination-description">${he.encode(description)}</p>
     </section>`
   );
 }
@@ -62,7 +62,7 @@ function getCitiesSuggestions(cities) {
   return (
     `<datalist id="destination-list-1">
       ${cities.map(({cityName}) => `
-        <option value="${cityName}"></option>
+        <option value="${he.encode(cityName)}"></option>
       `).join('')}
     </datalist>`
   );
@@ -128,7 +128,11 @@ function getEditFormTemplate(state, types, cities) {
                 <span class="visually-hidden">Price</span>
                 &euro;
               </label>
-              <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${state.price}">
+              <input class="event__input  event__input--price"
+              id="event-price-1"
+              type="number"
+              name="event-price"
+              value="${state.price}">
             </div>
 
             <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

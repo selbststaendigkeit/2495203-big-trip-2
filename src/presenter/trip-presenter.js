@@ -1,7 +1,6 @@
 import {render} from '../framework/render.js';
 import TripPointsListView from '../view/trip-points-list-view.js';
 import TripPointsListPresenter from './trip-points-list-presenter.js';
-import MessageView from '../view/message-view.js';
 import SortPresenter from './sort-presenter.js';
 
 export default class TripPresenter {
@@ -11,7 +10,6 @@ export default class TripPresenter {
   #sortPresenter = null;
   #pointsListComponent = null;
   #pointsListPresenter = null;
-  #messageComponent = null;
   #addButtonComponent = null;
 
   constructor({mainInfoContainer, tripContainer, pointsModel}) {
@@ -22,28 +20,24 @@ export default class TripPresenter {
     this.#pointsListPresenter = new TripPointsListPresenter({
       listElement: this.#pointsListComponent.element,
       pointsModel: this.#pointsModel,
+      tripContainer: this.#tripContainer
     });
     this.#sortPresenter = new SortPresenter({
       tripContainer: this.#tripContainer,
       handleSortChange: this.#pointsListPresenter.handleSortChange,
       pointsModel: this.#pointsModel
     });
-    this.#messageComponent = new MessageView();
 
     this.#pointsModel.setPointAddObserver(this.#handleModelPointAdd);
   }
 
   init({addButtonView}) {
     this.#addButtonComponent = addButtonView;
-    if (!this.#pointsModel.pointsCount) {
-      this.#renderMessage();
-      return;
-    }
     this.#renderPointsList();
   }
 
   handleAddingButtonClick() {
-    this.#removeMessage();
+    this.#pointsListPresenter.removeMessage();
     this.#createListLayout();
     this.#pointsListPresenter.openAddingForm();
   }
@@ -56,14 +50,6 @@ export default class TripPresenter {
   #createListLayout() {
     this.#sortPresenter.init();
     render(this.#pointsListComponent, this.#tripContainer);
-  }
-
-  #renderMessage() {
-    render(this.#messageComponent, this.#tripContainer);
-  }
-
-  #removeMessage() {
-    this.#messageComponent.removeElement();
   }
 
   #handleModelPointAdd = () => {
