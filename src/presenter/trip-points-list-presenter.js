@@ -24,13 +24,15 @@ export default class TripPointsListPresenter {
   #pointPresenters = new Map();
   #currentSortCriteria = SortCriteria.START_DAY;
   #noPointsMessageView = null;
+  #resetSortForm = null;
 
-  constructor({listElement, pointsModel, tripContainer}) {
+  constructor({listElement, pointsModel, tripContainer, resetSortForm}) {
     this.#listElement = listElement;
     this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
     this.#pointTypes = this.#pointsModel.pointTypes;
     this.#cities = this.#pointsModel.cities;
+    this.#resetSortForm = resetSortForm;
 
     this.#pointsModel.setPointEditObserver(this.#handleModelPointChange);
     this.#pointsModel.setPointRemoveObserver(this.#handleModelPointRemove);
@@ -68,6 +70,7 @@ export default class TripPointsListPresenter {
     });
     this.#resetAllForms();
     this.handleSortChange(SortCriteria.START_DAY);
+    this.#resetSortForm();
     render(this.#addingFormComponent, this.#listElement, RenderPosition.AFTERBEGIN);
   }
 

@@ -20,7 +20,11 @@ export default class SortPresenter {
     render(this.#sortView, this.#tripContainer);
   }
 
-  #onModelFilterChange = () => {
+  resetForm() {
     this.#sortView.resetForm();
+  }
+
+  #onModelFilterChange = () => {
+    this.resetForm();
   };
 }

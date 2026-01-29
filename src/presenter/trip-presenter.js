@@ -20,7 +20,8 @@ export default class TripPresenter {
     this.#pointsListPresenter = new TripPointsListPresenter({
       listElement: this.#pointsListComponent.element,
       pointsModel: this.#pointsModel,
-      tripContainer: this.#tripContainer
+      tripContainer: this.#tripContainer,
+      resetSortForm: this.#resetSortForm
     });
     this.#sortPresenter = new SortPresenter({
       tripContainer: this.#tripContainer,
@@ -51,6 +52,12 @@ export default class TripPresenter {
     this.#sortPresenter.init();
     render(this.#pointsListComponent, this.#tripContainer);
   }
+
+  #resetSortForm = () => {
+    if (this.#sortPresenter !== null) {
+      this.#sortPresenter.resetForm();
+    }
+  };
 
   #handleModelPointAdd = () => {
     this.#pointsListPresenter.clearPointsList();
