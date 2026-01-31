@@ -8,7 +8,7 @@ function getMessageTemplate(filter) {
 }
 
 export default class MessageView extends AbstractView {
-  #currentFilter = null;
+  #currentFilter;
 
   constructor({currentFilter}) {
     super();

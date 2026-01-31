@@ -33,7 +33,7 @@ function getSortTemplate() {
 }
 
 export default class SortView extends AbstractView {
-  #handleSortChange = null;
+  #handleSortChange;
 
   constructor({onSortChange}) {
     super();

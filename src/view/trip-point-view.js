@@ -57,13 +57,13 @@ function getTripPointTemplate(pointData) {
 }
 
 export default class TripPointView extends AbstractView {
-  #pointData = null;
-  #pointTypes = null;
-  #editButton = null;
-  #favoriteButton = null;
-  #cities = null;
-  #handleEditClick = null;
-  #handleFavoriteClick = null;
+  #pointData;
+  #pointTypes;
+  #editButton;
+  #favoriteButton;
+  #cities;
+  #handleEditClick;
+  #handleFavoriteClick;
 
   constructor({pointData, pointTypes, cities, onEditClick, onFavoriteClick}) {
     super();

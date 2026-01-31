@@ -37,7 +37,7 @@ function createTripMainInfoTemplate(mainInfo) {
 }
 
 export default class TripMainInfoView extends AbstractView {
-  #mainInfo = null;
+  #mainInfo;
 
   constructor({mainInfo}) {
     super();

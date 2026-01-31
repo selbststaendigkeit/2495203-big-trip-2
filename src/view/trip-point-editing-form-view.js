@@ -149,23 +149,23 @@ function getEditFormTemplate(state, types, cities) {
 }
 
 export default class TripPointEditingFormView extends AbstractStatefulView {
-  #pointTypes = null;
-  #cities = null;
-  #form = null;
-  #rollupButton = null;
-  #handleFormSubmit = null;
-  #handleRollupButtonClick = null;
-  #handleDeleteButtonClick = null;
-  #typeToggler = null;
-  #typesDropdown = null;
-  #typeOutput = null;
-  #typeIcon = null;
-  #destinationInput = null;
-  #priceInput = null;
-  #offersContainer = null;
-  #startPicker = null;
-  #endPicker = null;
-  #deleteButton = null;
+  #pointTypes;
+  #cities;
+  #form;
+  #rollupButton;
+  #handleFormSubmit;
+  #handleRollupButtonClick;
+  #handleDeleteButtonClick;
+  #typeToggler;
+  #typesDropdown;
+  #typeOutput;
+  #typeIcon;
+  #destinationInput;
+  #priceInput;
+  #offersContainer;
+  #startPicker;
+  #endPicker;
+  #deleteButton;
 
   constructor({pointData, pointTypes, cities, onFormSubmit, onRollupButtonClick, onDeleteClick}) {
     super();

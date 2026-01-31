@@ -14,17 +14,17 @@ import {SORT_CRITERIA} from '../constants.js';
 import MessageView from '../view/message-view';
 
 export default class TripPointsListPresenter {
-  #listElement = null;
-  #tripContainer = null;
-  #pointsModel = null;
-  #pointTypes = null;
-  #cities = null;
-  #addButtonComponent = null;
-  #addingFormComponent = null;
+  #listElement;
+  #tripContainer;
+  #pointsModel;
+  #pointTypes;
+  #cities;
+  #addButtonComponent;
+  #addingFormComponent;
   #pointPresenters = new Map();
   #currentSortCriteria = SORT_CRITERIA.START_DAY;
-  #noPointsMessageView = null;
-  #resetSortForm = null;
+  #noPointsMessageView;
+  #resetSortForm;
 
   constructor({listElement, pointsModel, tripContainer, resetSortForm}) {
     this.#listElement = listElement;
@@ -92,7 +92,7 @@ export default class TripPointsListPresenter {
   };
 
   removeMessage() {
-    if (this.#noPointsMessageView !== null) {
+    if (this.#noPointsMessageView) {
       remove(this.#noPointsMessageView);
       this.#noPointsMessageView = null;
     }

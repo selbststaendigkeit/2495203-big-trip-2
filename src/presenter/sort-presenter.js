@@ -2,10 +2,10 @@ import SortView from '../view/sort-view.js';
 import {render} from '../framework/render.js';
 
 export default class SortPresenter {
-  #tripContainer = null;
-  #handleSortChange = null;
-  #sortView = null;
-  #pointsModel = null;
+  #tripContainer;
+  #handleSortChange;
+  #sortView;
+  #pointsModel;
 
   constructor({tripContainer, handleSortChange, pointsModel}) {
     this.#tripContainer = tripContainer;

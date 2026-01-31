@@ -4,13 +4,13 @@ import TripPointsListPresenter from './trip-points-list-presenter.js';
 import SortPresenter from './sort-presenter.js';
 
 export default class TripPresenter {
-  #mainInfoContainer = null;
-  #tripContainer = null;
-  #pointsModel = null;
-  #sortPresenter = null;
-  #pointsListComponent = null;
-  #pointsListPresenter = null;
-  #addButtonComponent = null;
+  #mainInfoContainer;
+  #tripContainer;
+  #pointsModel;
+  #sortPresenter;
+  #pointsListComponent;
+  #pointsListPresenter;
+  #addButtonComponent;
 
   constructor({mainInfoContainer, tripContainer, pointsModel}) {
     this.#pointsModel = pointsModel;
@@ -54,7 +54,7 @@ export default class TripPresenter {
   }
 
   #resetSortForm = () => {
-    if (this.#sortPresenter !== null) {
+    if (this.#sortPresenter) {
       this.#sortPresenter.resetForm();
     }
   };

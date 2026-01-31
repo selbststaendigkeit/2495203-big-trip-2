@@ -23,14 +23,14 @@ export default class PointsModel {
   #blankPoint = blankPoint;
   #pointTypes = pointTypes;
   #cities = cities;
-  #adaptedPointsData = null;
-  #adaptedBlankPointData = null;
-  #adaptedPointTypesData = null;
-  #pointEditObserver = null;
-  #pointAddObserver = null;
-  #pointRemoveObserver = null;
-  #filterChangeListObserver = null;
-  #filterChangeSortObserver = null;
+  #adaptedPointsData;
+  #adaptedBlankPointData;
+  #adaptedPointTypesData;
+  #pointEditObserver;
+  #pointAddObserver;
+  #pointRemoveObserver;
+  #filterChangeListObserver;
+  #filterChangeSortObserver;
   #defaultFilter = FILTER.EVERYTHING;
   #currentFilter = this.#defaultFilter;
 

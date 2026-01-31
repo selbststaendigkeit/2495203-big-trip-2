@@ -2,9 +2,9 @@ import FilterView from '../view/filter-view.js';
 import {render} from '../framework/render.js';
 
 export default class FilterPresenter {
-  #pointsModel = null;
-  #mainInfoContainer = null;
-  #filterView = null;
+  #pointsModel;
+  #mainInfoContainer;
+  #filterView;
 
   constructor({pointsModel, mainInfoContainer}) {
     this.#pointsModel = pointsModel;
@@ -15,7 +15,7 @@ export default class FilterPresenter {
   }
 
   init() {
-    if (this.#filterView !== null) {
+    if (this.#filterView) {
       render(this.#filterView, this.#mainInfoContainer);
     }
   }

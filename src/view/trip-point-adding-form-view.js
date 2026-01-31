@@ -164,21 +164,21 @@ function getAddTripPointFormTemplate({state, pointTypes, cities}) {
 }
 
 export default class TripPointAddingFormView extends AbstractStatefulView {
-  #cities = null;
-  #pointTypes = null;
-  #form = null;
-  #cancelButton = null;
-  #handleFormSubmit = null;
-  #typeToggler = null;
-  #typesDropdown = null;
-  #typeOutput = null;
-  #typeIcon = null;
-  #destinationInput = null;
-  #priceInput = null;
-  #offersContainer = null;
-  #addButtonView = null;
-  #startPicker = null;
-  #endPicker = null;
+  #cities;
+  #pointTypes;
+  #form;
+  #cancelButton;
+  #handleFormSubmit;
+  #typeToggler;
+  #typesDropdown;
+  #typeOutput;
+  #typeIcon;
+  #destinationInput;
+  #priceInput;
+  #offersContainer;
+  #addButtonView;
+  #startPicker;
+  #endPicker;
 
   constructor({cities, pointTypes, blankPoint, onFormSubmit, addButtonView}) {
     super();
